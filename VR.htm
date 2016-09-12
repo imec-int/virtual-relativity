@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+  <head>
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+	<meta charset="utf-8">
+	<title>Virtual Relativity</title>
+	<meta name="description" content="Virtual Relativity">
+	<meta content="width=device-width,initial-scale=1,maximum-scale=1,shrink-to-fit=no,user-scalable=no,minimal-ui" name="viewport" aframe-injected="">
+	<meta content="yes" name="mobile-web-app-capable" aframe-injected="">
+	<meta content="black" name="theme-color" aframe-injected="">	
+	<script src="js/aframe.js"></script>
+	<script src="js/hellorelativisticworld.js"></script>
+  </head>
+  <body class="a-body">
+	<script>
+		  AFRAME.registerComponent('lightspeed', 
+		  {
+
+		  schema: { default: 0.001 },
+		  tick: function (t) 
+		  {
+			var object3D = this.el.object3D;
+			var data = this.data;
+			if (object3D.el.components.material.material.__webglShader!= undefined)
+			{
+				object3D.el.components.material.material.speedvector.y = data;
+				
+			}
+		  }
+			});
+		</script>
+		<a-scene vr-mode-ui="" keyboard-shortcuts="" inspector="" canvas="" class="fullscreen">
+			<a-assets>
+				<video id="video" src="https://ucarecdn.com/bcece0a8-86ce-460e-856b-40dac4875f15/" autoplay loop crossorigin>					
+				</video>
+    			<a-asset-item id="tie-obj" src="/3dmodel/tie-intercept.obj"></a-asset-item>
+    			<a-asset-item id="tie-mtl" src="/3dmodel/tie-intercept.mtl"></a-asset-item>
+ 			
+			</a-assets>
+			
+			<a-videosphere if="videosphere" src="#video" material="shader: hello-relativistic-world-shader; opacity: 1.0; depthTest: true" lightspeed="0">
+				<a-animation attribute="lightspeed" from="0.001" to=".99" direction="alternate" dur="5000" repeat="indefinite" easing="ease">
+				</a-animation>
+			</a-videosphere>
+				<a-entity id="tie" obj-model="obj: #tie-obj; mtl: #tie-mtl"></a-entity>		
+			<canvas style="width: 1525px; height: 195px;" height="195" width="1525" data-aframe-canvas="true" class="a-canvas a-grab-cursor"/>
+			<div aframe-injected="" class="a-enter-vr">
+				<button aframe-injected="" class="a-enter-vr-button"/>
+			</div>
+			<div aframe-injected="" class="a-orientation-modal a-hidden">
+				<button aframe-injected="">Exit VR</button>
+			</div>
+			<a-entity visible="" scale="" aframe-injected="" rotation="" position="" data-aframe-default-camera="" look-controls="" wasd-controls="" camera=""/>
+			<a-entity visible="" scale="" aframe-injected="" rotation="" position="" data-aframe-default-light="" light=""/>
+			<a-entity visible="" scale="" aframe-injected="" rotation="" position="" data-aframe-default-light="" light=""/>
+		</a-scene>
+  </body>
+</html>
