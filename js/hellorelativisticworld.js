@@ -14,6 +14,11 @@ function setPos (x,y,z) {
 // groupObject3D.position.x=49
 // groupObject3D.position.y=0
 // groupObject3D.position.z=-100
+// var ship = document.querySelector('#tie').object3D;
+// ship.scale.multiplyScalar(2);
+// ship.position.x = 0.17;
+// ship.position.y = 1.1;
+// ship.position.z = 0.25;
 
 /**
  * Builds and normalize material data, normalizing stuff along the way.
