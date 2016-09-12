@@ -10,10 +10,10 @@ function setPos (x,y,z) {
   });
 }
 
-groupObject3D = document.querySelector('#tie').object3D;
-groupObject3D.position.x=49
-groupObject3D.position.y=0
-groupObject3D.position.z=-100
+// groupObject3D = document.querySelector('#tie').object3D;
+// groupObject3D.position.x=49
+// groupObject3D.position.y=0
+// groupObject3D.position.z=-100
 
 /**
  * Builds and normalize material data, normalizing stuff along the way.
