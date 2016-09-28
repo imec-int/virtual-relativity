@@ -1,5 +1,6 @@
 var CubeLoader = new THREE.CubeTextureLoader();
 var texturePromises = {};
+initColladaModels();
 
 
 function setPos (x,y,z) {
@@ -7,6 +8,30 @@ function setPos (x,y,z) {
     x: x,
     y: y,
     z: z
+  });
+}
+
+function initColladaModels(){
+  document.addEventListener('model-loaded', function (evt) {
+    console.log(evt.target.object3D);
+    if(evt.target.id == "tie"){
+      // setTimeout(function(){
+        
+      // },2000)
+      console.log("Ship loaded");
+      var ship = evt.target.object3D.children[0].children[0].children[0];
+      ship.geometry.computeVertexNormals();
+      // make it shiny
+      for(var i=0;i<ship.material.materials.length;i++){
+        ship.material.materials[i].specular = {r:0.2,g:0.2,b:0.25};
+        if(ship.material.materials[i].name == "RRSilver") 
+          ship.material.materials[i].specular = {r:0.3,g:0.3,b:0.4};
+      }
+    }else if(evt.target.id == "throttle-handle"){
+      var throttleHandle = evt.target.object3D.children[0].children[0].children[0];
+      // console.log(evt.target.object3D.children[0].children[0]);
+      // throttleHandle.geometry.computeVertexNormals();
+    }
   });
 }
 
