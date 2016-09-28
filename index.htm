@@ -28,6 +28,7 @@
 						// change speed dial
 						// console.log(data, );
 						document.querySelector('#speed').setAttribute("rotation","0 0 "+(252*data +36));
+						document.querySelector('#throttle').setAttribute("rotation", (40*data -20)+" 0 0");
 					}
 		  }
 			});
@@ -37,6 +38,8 @@
 				<video id="video" src="https://ucarecdn.com/bcece0a8-86ce-460e-856b-40dac4875f15/" autoplay loop crossorigin>					
 				</video>
 				<a-asset-item id="tie-dae" src="3dmodel/retro-racer/ship.dae"></a-asset-item>
+				<a-asset-item id="handle-dae" src="3dmodel/retro-racer/throttle-handle2.dae"></a-asset-item>
+				<a-asset-item id="base-dae" src="3dmodel/retro-racer/throttle-base.dae"></a-asset-item>
 			</a-assets>
 			
 			<a-videosphere id="videosphere" src="#video" material="shader: hello-relativistic-world-shader; opacity: 1.0; depthTest: true" lightspeed="0">
@@ -45,7 +48,15 @@
 			</a-videosphere>
 				<!--<a-entity id="tie" obj-model="obj: #tie-obj; mtl: #tie-mtl"></a-entity>		-->
 			<a-entity position="0 0 0" rotation="0 0 0">
-				<a-entity id="tie" collada-model="#tie-dae" position="0.22 1.4 0.25" scale="2 2 2"></a-entity>	
+				<a-entity position="0.22 1.4 0.25" scale="2 2 2"">
+					<a-entity id="tie" collada-model="#tie-dae" position="0 0 0" rotation="0 0 0"></a-entity>	
+					<a-entity id="throttle" position="0 -0.05 -0.06" rotation="-30 0 0">
+						<a-entity id="throttle-handle" collada-model="#handle-dae" position="0 0.05 0.06"></a-entity>
+						<!--<a-box position="0 0 0" rotation="0 0 0" width="0.1" height="0.1" depth="0.002"  color="#DDFFEE" opacity="0.4"></a-box>-->
+					</a-entity>
+					<a-entity id="throttle-base" collada-model="#base-dae" position="0 0 0"></a-entity>
+				</a-entity>
+				
 				<a-entity id="speed" position="0.207 1.42 0.4" rotation="0 0 0">
 					<a-box position="0 0.018 0" rotation="0 0 0" width="0.005" height="0.040" depth="0.001"  color="#EF2D5E" opacity="0.9"></a-box>
 					<!--<a-box position="0 0 .01" rotation="0 0 0" width="0.1" height="0.1" depth="0.001"  color="#DDFFEE" opacity="0.2"></a-box>-->
