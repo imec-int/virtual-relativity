@@ -1,7 +1,10 @@
 var CubeLoader = new THREE.CubeTextureLoader();
 var texturePromises = {};
 initColladaModels();
-initInput();
+/*choose attached input*/
+//initMouseInput();
+InitJoystick();
+
 
 function setPos (x,y,z) {
   tie.setAttribute('position', {
@@ -34,10 +37,10 @@ function initColladaModels(){
     }
   });
 }
-
-function initInput(){
+/*Mouse input section*/
+function initMouseInput(){
   document.addEventListener('mousewheel', function(e){
-    // console.log("scroll",e);
+    //console.log("scroll",e);
     var speed = parseFloat(document.querySelector('#videosphere').getAttribute("lightspeed"));
     speed += e.wheelDelta * -0.001;
     if(speed>0.99) speed = 0.99;
@@ -54,6 +57,113 @@ function initInput(){
           document.querySelector('#throttle').setAttribute("rotation", (40*speed -20)+" 0 0");
         }
   });
+}
+/*Joystick input section*/
+/*
+ * gamepad object:
+ * Gamepad ID: vendor and model information
+ * variables: 
+ * axes: returns array with absolute values per each axis attached/scanned
+ * buttons: returns array with 0 or 1 values depending on button (not) pressed
+ * connected: boolean
+ * id: Model + hex vendor + hex Product code
+ * index: number of attached joystick/gamepad
+ * mapping: if differing from standard mapping
+ * timestamp: timestamp since last change in values
+    * e.g.
+    * Gamepad {id: "T.Flight Hotas X (Vendor: 044f Product: b108)", index: 0, connected: true, timestamp: 15901450798896, mapping: ""…}
+    * axes : Array[10]
+    * buttons : Array[12]
+    * connected : true
+    * id : "T.Flight Hotas X (Vendor: 044f Product: b108)"
+    * index : 0
+    * mapping : ""
+    * timestamp : 15901450798896
+    * __proto__ : Gamepad
+ */
+var haveEvents = 'GamepadEvent' in window;
+var haveWebkitEvents = 'WebKitGamepadEvent' in window;
+var controller = {};
+var scanInterval = 0;
+var rAF = window.mozRequestAnimationFrame ||
+  window.webkitRequestAnimationFrame ||
+  window.requestAnimationFrame;
+/*
+ * Init functions, listens for events of gamepad and connects if possible
+ * setInterval checks sporadically for attached gamepads, until scanInterval gets cleared and it is clear that a gamepad is attached. (gets cleared in addgamepad())
+ */
+function InitJoystick(){
+     if (haveEvents) 
+        {
+            window.addEventListener("gamepadconnected", connecthandler);
+            window.addEventListener("gamepaddisconnected", disconnecthandler);
+        } else if (haveWebkitEvents) 
+        {
+            window.addEventListener("webkitgamepadconnected", connecthandler);
+            window.addEventListener("webkitgamepaddisconnected", disconnecthandler);
+        } else 
+        {
+            scanInterval = setInterval(scangamepads, 500);
+        }
+}
+/*
+ * connection blocks:
+ */
+function connecthandler(e) 
+{
+    addgamepad(e.gamepad);
+}
+function disconnecthandler(e) {
+    removegamepad(e.gamepad);
+}
+/*
+ * main functions to get position of gamepad
+ */
+function updateStatus() {
+    if(controller){
+        updateSpeed();
+    }
+    rAF(updateStatus);
+}
+function updateSpeed(e)
+{
+    var speed = parseFloat(document.querySelector('#videosphere').getAttribute("lightspeed"));
+    //Alter speed with -1.0..1.0 from 2nd-axis ==> mapped on 0..1
+    speed = (controller.axes[2]+1)*0.5;
+    if(speed>0.99) speed = 0.99;
+    if(speed<0.01) speed = 0.01;
+    document.querySelector('#videosphere').setAttribute("lightspeed", speed);
+        
+    if (document.querySelector('#videosphere').object3D.el.components.material.material.__webglShader!= undefined)
+    {
+              // change speedvector of videosphere material
+              document.querySelector('#videosphere').object3D.el.components.material.material.speedvector.y = speed;
+              // change speed dial
+              document.querySelector('#speed').setAttribute("rotation","0 0 "+(252*speed +36));
+              document.querySelector('#throttle').setAttribute("rotation", (40*speed -20)+" 0 0");
+    }
+}
+/*
+ * Scan list of attached gamepads (we only check 1 and append it to controller, if more avaiable, controller should be array!)
+ */
+function scangamepads() {
+    var gamepads = navigator.getGamepads ? navigator.getGamepads() : (navigator.webkitGetGamepads ? navigator.webkitGetGamepads() : []);
+    for (var i = 0; i < gamepads.length; i++)  
+    {
+      if(gamepads[i])
+      {
+          addgamepad(gamepads[i])
+          break;
+      }
+    }
+}
+function addgamepad(gamepad) {
+    controller = gamepad; 
+    clearInterval(scanInterval);
+    rAF(updateStatus);
+}
+function removegamepad(gamepad) {
+    controller = undefined;
 }
 
 // groupObject3D = document.querySelector('#tie').object3D;
