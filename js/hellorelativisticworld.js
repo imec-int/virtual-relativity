@@ -13,6 +13,7 @@ function setPos (x,y,z) {
 
 function initColladaModels(){
   document.addEventListener('model-loaded', function (evt) {
+    console.log(evt.target.id);
     console.log(evt.target.object3D);
     if(evt.target.id == "tie"){
       // setTimeout(function(){
@@ -31,6 +32,13 @@ function initColladaModels(){
       var throttleHandle = evt.target.object3D.children[0].children[0].children[0];
       // console.log(evt.target.object3D.children[0].children[0]);
       // throttleHandle.geometry.computeVertexNormals();
+    }else if(evt.target.id == "driver"){
+      var driver = evt.target.object3D.children[2].children[1].children[0];
+      console.log(driver);
+      console.log(driver.geometry.animation);
+      // var animation = new THREE.Animation( driver, driver.geometry.animation );
+      // var kfAnimation = new THREE.KeyFrameAnimation( driver.geometry.animation );
+      // animation.play();
     }
   });
 }
@@ -57,7 +65,11 @@ function getMaterialData (data) {
     fog: data.fog,
     metalness: data.metalness,
     roughness: data.roughness,
-	speedvector: data.speedvector
+	speedvector: data.speedvector,
+	dopplerTerm: data.dopplerTerm,
+	dopplerTwine: data.dopplerTwine,
+	dopplerIrPrefactor: data.dopplerIrPrefactor,
+	dopplerHueAngleFix: data.dopplerHueAngleFix
   };
 
   if (data.normalMap) { newData.normalScale = data.normalScale; }
@@ -110,6 +122,12 @@ AFRAME.registerShader('hello-relativistic-world-shader', {
       type: 'vec3',
       default: { x: 0.001, y: 0, z: 0 }
     },
+    
+    dopplerTerm: { default:4.0 / 3.0 },
+    dopplerTwine: { default:1.0 },
+    dopplerIrPrefactor: { default:14.0 / 75.0 },
+    dopplerHueAngleFix: { default: 0.0 },
+    
   },
    
 

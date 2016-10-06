@@ -23,8 +23,18 @@
 				var data = this.data;
 				if (object3D.el.components.material.material.__webglShader!= undefined)
 					{
+						//var dopplerIrPrefactor = 14.0 / 75.0; 		// prefactor for iradiance values ~5000',
+						//var dopplerIrPrefactor = 28.0 / 51.0; 		// prefactor for iradiance values ~1700',
+						
 						// change speedvector of videosphere material
 						object3D.el.components.material.material.speedvector.y = data;
+
+						//object3D.el.components.material.material.dopplerIrPrefactor = 28.0 / 51.0;		// default value is 14/75, see above
+						object3D.el.components.material.material.dopplerHueAngleFix = 0.0;			// default value is 0, pulls the hue towards red faster depending on angle difference between original theta and new theta
+						//object3D.el.components.material.material.dopplerTerm = 4.0 / 3.0;			// default value is 4/3
+						//object3D.el.components.material.material.dopplerTwine = data;				// default value is 1.0 - twining between 'normal' color and doppler shifted color
+
+
 						// change speed dial
 						// console.log(data, );
 						document.querySelector('#speed').setAttribute("rotation","0 0 "+(252*data +36));
@@ -40,6 +50,8 @@
 				<a-asset-item id="tie-dae" src="3dmodel/retro-racer/ship.dae"></a-asset-item>
 				<a-asset-item id="handle-dae" src="3dmodel/retro-racer/throttle-handle2.dae"></a-asset-item>
 				<a-asset-item id="base-dae" src="3dmodel/retro-racer/throttle-base.dae"></a-asset-item>
+				<!--<a-asset-item id="driver-dae" src="3dmodel/driver2.dae"></a-asset-item>-->
+				<!--<a-asset-item id="model" src="3dmodel/throttling-driver/throttling-driver.json"></a-asset-item>-->
 			</a-assets>
 			
 			<a-videosphere id="videosphere" src="#video" material="shader: hello-relativistic-world-shader; opacity: 1.0; depthTest: true" lightspeed="0">
@@ -50,6 +62,8 @@
 			<a-entity position="0 0 0" rotation="0 0 0">
 				<a-entity position="0.22 1.4 0.25" scale="2 2 2"">
 					<a-entity id="tie" collada-model="#tie-dae" position="0 0 0" rotation="0 0 0"></a-entity>	
+					<!--<a-entity id="driver" collada-model="#driver-dae" position="0 0 0" rotation="0 0 0">-->
+					<!--<a-entity id="driver" blend-character-model="#model"></a-entity>-->
 					<a-entity id="throttle" position="0 -0.05 -0.06" rotation="-30 0 0">
 						<a-entity id="throttle-handle" collada-model="#handle-dae" position="0 0.05 0.06"></a-entity>
 						<!--<a-box position="0 0 0" rotation="0 0 0" width="0.1" height="0.1" depth="0.002"  color="#DDFFEE" opacity="0.4"></a-box>-->

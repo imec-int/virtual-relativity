@@ -13,25 +13,34 @@
   </head>
   <body class="a-body">
 	<script>
-		  // AFRAME.registerComponent('lightspeed', 
-		  // {
+		  AFRAME.registerComponent('lightspeed', 
+		  {
 
-		  // schema: { default: 0.001 },
-		  // tick: function (t) 
-		  // {
-			// 	var object3D = this.el.object3D;
-			// 	var data = this.data;
-			// 	if (object3D.el.components.material.material.__webglShader!= undefined)
-			// 		{
-			// 			// change speedvector of videosphere material
-			// 			object3D.el.components.material.material.speedvector.y = data;
-			// 			// change speed dial
-			// 			// console.log(data, );
-			// 			document.querySelector('#speed').setAttribute("rotation","0 0 "+(252*data +36));
-			// 			document.querySelector('#throttle').setAttribute("rotation", (40*data -20)+" 0 0");
-			// 		}
-		  // }
-			// });
+		  schema: { default: 0.001 },
+		  tick: function (t) 
+		  {
+				var object3D = this.el.object3D;
+				var data = this.data;
+				if (object3D.el.components.material.material.__webglShader!= undefined)
+					{
+						//var dopplerIrPrefactor = 14.0 / 75.0; 		// prefactor for iradiance values ~5000',
+						//var dopplerIrPrefactor = 28.0 / 51.0; 		// prefactor for iradiance values ~1700',
+						
+						// change speedvector of videosphere material
+						object3D.el.components.material.material.speedvector.y = data;
+
+						//object3D.el.components.material.material.dopplerIrPrefactor = 28.0 / 51.0;		// default value is 14/75, see above
+						object3D.el.components.material.material.dopplerHueAngleFix = 0.0;			// default value is 0, pulls the hue towards red faster depending on angle difference between original theta and new theta
+						//object3D.el.components.material.material.dopplerTerm = 4.0 / 3.0;			// default value is 4/3
+						//object3D.el.components.material.material.dopplerTwine = data;				// default value is 1.0 - twining between 'normal' color and doppler shifted color
+						
+						// // change speed dial
+						// // console.log(data, );
+						// document.querySelector('#speed').setAttribute("rotation","0 0 "+(252*data +36));
+						// document.querySelector('#throttle').setAttribute("rotation", (40*data -20)+" 0 0");
+					}
+		  }
+			});
 		</script>
 		<a-scene vr-mode-ui="" keyboard-shortcuts="" inspector="" canvas="" class="fullscreen">
 			<a-assets>
